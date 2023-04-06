@@ -11,7 +11,15 @@ def home():
 
 @app.route("/api/v1/<station>/<date>")
 def about(station, date):
-    return {}
+    filename = "data/TG_STAID" + str(station).zfill(6) + ".txt"
+    print(filename)
+    df = pd.read_csv(filename, skiprows=20, parse_dates=["    DATE"])
+    temperature = df.loc[df["    DATE"] == date]["   TG"].squeeze()
+    return {
+        "station": station,
+        "date": date,
+        "temperature": float(temperature)
+    }
 
 
 if __name__ == "__main__":
